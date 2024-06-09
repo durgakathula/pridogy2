@@ -1,0 +1,89 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Load train and test datasets
+train_df = pd.read_csv("/content/train.csv")
+test_df = pd.read_csv("/content/test.csv")
+
+# Display the first few rows of the train dataset
+print("Train Dataset:")
+print(train_df.head())
+
+# Display the first few rows of the test dataset
+print("\nTest Dataset:")
+print(test_df.head())
+
+# Check for missing values in train dataset
+print("\nMissing Values in Train Dataset:")
+print(train_df.isnull().sum())
+
+# Check for missing values in test dataset
+print("\nMissing Values in Test Dataset:")
+print(test_df.isnull().sum())
+
+# Fill missing values in the train dataset
+train_df['Age'].fillna(train_df['Age'].median(), inplace=True)
+train_df['Embarked'].fillna(train_df['Embarked'].mode()[0], inplace=True)
+train_df.drop('Cabin', axis=1, inplace=True)
+
+# Fill missing values in the test dataset
+test_df['Age'].fillna(test_df['Age'].median(), inplace=True)
+test_df['Fare'].fillna(test_df['Fare'].median(), inplace=True)
+test_df.drop('Cabin', axis=1, inplace=True)
+
+# Check if there are any missing values left in train dataset
+print("\nMissing Values in Train Dataset after handling:")
+print(train_df.isnull().sum())
+
+# Check if there are any missing values left in test dataset
+print("\nMissing Values in Test Dataset after handling:")
+print(test_df.isnull().sum())
+
+# EDA on train dataset
+sns.countplot(x='Survived', data=train_df)
+plt.title('Survival Count in Train Dataset')
+plt.show()
+
+sns.countplot(x='Survived', hue='Pclass', data=train_df)
+plt.title('Survival Count by Passenger Class in Train Dataset')
+plt.show()
+
+sns.countplot(x='Survived', hue='Sex', data=train_df)
+plt.title('Survival Count by Sex in Train Dataset')
+plt.show()
+
+sns.histplot(x='Age', data=train_df, hue='Survived', kde=True)
+plt.title('Survival Distribution by Age in Train Dataset')
+plt.show()
+
+sns.histplot(x='Fare', data=train_df, hue='Survived', kde=True)
+plt.title('Survival Distribution by Fare in Train Dataset')
+plt.show()
+
+sns.countplot(x='Survived', hue='Embarked', data=train_df)
+plt.title('Survival Count by Embarked Port in Train Dataset')
+plt.show()
+
+# EDA on test dataset
+# Note: Since the test dataset does not contain 'Survived' column, we cannot visualize survival directly.
+
+sns.countplot(x='Pclass', data=test_df)
+plt.title('Passenger Class Distribution in Test Dataset')
+plt.show()
+
+sns.countplot(x='Sex', data=test_df)
+plt.title('Sex Distribution in Test Dataset')
+plt.show()
+
+sns.histplot(x='Age', data=test_df, kde=True)
+plt.title('Age Distribution in Test Dataset')
+plt.show()
+
+sns.histplot(x='Fare', data=test_df, kde=True)
+plt.title('Fare Distribution in Test Dataset')
+plt.show()
+
+sns.countplot(x='Embarked', data=test_df)
+plt.title('Embarked Port Distribution in Test Dataset')
+plt.show()
